@@ -55,8 +55,7 @@ module "nat" {
   #region_name = each.value.region_name
   #vpc_network_name = var.vpc_name
 
-  depends_on = [
-    module.router_network
+
   ]
 }
 
