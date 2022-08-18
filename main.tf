@@ -56,7 +56,7 @@ module "nat" {
   #vpc_network_name = var.vpc_name
 
 
-  ]
+
 }
 
 
