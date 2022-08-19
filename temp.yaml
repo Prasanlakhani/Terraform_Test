@@ -1,0 +1,108 @@
+name: 'Run TF on PR to master'
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  terraform:
+    name: 'Terraform steps'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set git auth
+        run: |
+            git config --global url."https://di9gwtd:${GH_TOKEN}@github.com/mckesson".insteadOf "https://github.com/mckesson"
+        env:
+            GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          export_default_credentials: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+
+      - name: Terraform fmt core-vpc
+        id: fmt-core
+        run: terraform -chdir=core-vpc fmt -check
+
+      - name: Terraform fmt mgmt-vpc
+        id: fmt-mgmt
+        run: terraform -chdir=mgmt-vpc fmt -check
+
+      - name: Terraform fmt untrust-vpc
+        id: fmt-untrust
+        run: terraform -chdir=untrust-vpc fmt -check
+
+      - name: Terraform Init core-vpc
+        id: init-core
+        run: terraform -chdir=core-vpc init
+
+      - name: Terraform Init mgmt-vpc
+        id: init-mgmt
+        run: terraform -chdir=mgmt-vpc init
+
+      - name: Terraform Init untrust-vpc
+        id: init-untrust
+        run: terraform -chdir=untrust-vpc init
+
+      - name: Terraform Validate core-vpc
+        id: validate-core
+        run: terraform -chdir=core-vpc validate -no-color
+
+      - name: Terraform Validate mgmt-vpc
+        id: validate-mgmt
+        run: terraform -chdir=mgmt-vpc validate -no-color
+
+      - name: Terraform Validate untrust-vpc
+        id: validate-untrust
+        run: terraform -chdir=untrust-vpc validate -no-color
+
+      - name: Terraform Plan core-vpc
+        id: plan-core
+        if: github.event_name == 'pull_request'
+        run: terraform -chdir=core-vpc plan -no-color
+
+      - name: Terraform Plan mgmt-vpc
+        id: plan-mgmt
+        if: github.event_name == 'pull_request'
+        run: terraform -chdir=mgmt-vpc plan -no-color
+
+      - uses: actions/github-script@v4.0.2
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan-core.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt-core.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init-core.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate-core.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan-core.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
