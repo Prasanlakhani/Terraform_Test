@@ -1,3 +1,8 @@
+
+variable "GOOGLE_SA_KEY" {
+default= ""
+}
+
 variable "project_name" {
   type = string
   #default     = "prasan-nirav"

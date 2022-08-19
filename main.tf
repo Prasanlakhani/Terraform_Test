@@ -6,6 +6,7 @@ terraform {
     google = {
       source  = "hashicorp/google"
       version = ">= 4.5"
+      credentials = var.GOOGLE_SA_KEY
 
     }
   }
