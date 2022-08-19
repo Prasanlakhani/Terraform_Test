@@ -16,7 +16,8 @@ terraform {
 provider "google" {
   project = var.project_name
   #region  = var.region_name
-  credentials = var.GOOGLE_SA_KEY
+  #credentials = var.GOOGLE_CREDENTIALS
+
 }
 
 terraform {

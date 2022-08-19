@@ -1,7 +1,7 @@
 
-variable "GOOGLE_SA_KEY" {
-default= ""
-}
+#variable "GOOGLE_CREDENTIALS" {
+#default= ""
+#}
 
 variable "project_name" {
   type = string
