@@ -117,15 +117,15 @@ jobs:
 
           </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``*`;
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\``*`;
 
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-	    
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
     - name: Terraform Plan Status
       if: steps.plan.outcome == 'failure'
       run: exit 1
