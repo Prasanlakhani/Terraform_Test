@@ -38,18 +38,19 @@ module "vpc" {
   project_name = var.project_name
 }
 
-#module "subnetwork" {
-#  source      = "./Module/subnet"
-#  for_each    = var.subnetworks
-#  subnet_name = "subnet-${each.value.region_name}"
-#  #subnet_name = each.value.subnet_name
-#  ipaddress   = each.value.ipaddress
-#  region_name = each.value.region_name
-#  #vpc_network_name = google_compute_network.vpc_network.name
-#  #vpc_network_name =  module.vpc.name
-#  vpc_network_name = var.vpc_name
+module "subnetwork" {
+  source      = "./Module/subnet"
+  for_each    = var.subnetworks
+  subnet_name = "subnet-${each.value.region_name}"
+  #subnet_name = each.value.subnet_name
+  ipaddress   = each.value.ipaddress
+  region_name = each.value.region_name
+  #vpc_network_name = google_compute_network.vpc_network.name
+  #vpc_network_name =  module.vpc.name
+  vpc_network_name = module.vpc.vpc_out
 
-#}
+}
+
 
 #module "router_network" {
 #  source           = "./Module/router"
