@@ -9,6 +9,9 @@ resource "google_sql_database_instance" "master" {
 
   settings {
     tier = var.database_instance.settings.tier
+    backup_configuration {
+      enabled = true
+    } 
     ip_configuration {
       ipv4_enabled    = var.database_instance.settings.ipv4_enabled
       private_network = var.network_id
