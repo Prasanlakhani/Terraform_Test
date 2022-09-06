@@ -99,7 +99,7 @@ module "instance_group" {
   health_check      = var.health_check
   instance_template = var.instance_template
   group_manager     = var.group_manager
-  autoscaler         = var.autoscaler.default
+  autoscaler        = var.autoscaler.default
   #autoscaler         = var.autoscaler #[terraform.workspace]
   instance_boot_disk = var.instance_boot_disk
   public-ssh-key     = local.public-ssh-key
