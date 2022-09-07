@@ -20,6 +20,13 @@ provider "google" {
 
 }
 
+provider "google-beta" {
+  project = var.project_name
+  #region  = var.region_name
+  #credentials = var.GOOGLE_CREDENTIALS
+
+}
+
 terraform {
   backend "remote" {
     # The name of your Terraform Cloud organization.

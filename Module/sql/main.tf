@@ -39,7 +39,7 @@ resource "google_sql_database" "database" {
 # For private IP
 
 resource "google_compute_global_address" "private_ip_address" {
-  #provider = google-beta
+  provider = google-beta
 
   name          = var.global_address.name
   purpose       = var.global_address.purpose
@@ -49,7 +49,7 @@ resource "google_compute_global_address" "private_ip_address" {
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  #provider = google-beta
+  provider = google-beta
 
   network                 = var.network_id
   service                 = "servicenetworking.googleapis.com"
