@@ -17,3 +17,11 @@ output "subnet_out_s1" {
   value = module.subnetwork["s1"].subnet_out.id
   #value = toset(values(module.subnetwork)[*].region)
 }
+
+output "router_out" {
+  value = module.router_network
+}
+
+output "router_out_s1" {
+  value = module.router_network["s1"].router_out.id
+}

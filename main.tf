@@ -64,6 +64,9 @@ module "nat" {
   nat_router_name = "router-${each.value.region_name}"
   nat_region_name = each.value.region_name
 
+depends_on = [
+  module.router_network
+]
 }
 
 #output "network_id" {
@@ -108,7 +111,7 @@ module "instance_group" {
     #subnetwork_id = data.terraform_remote_state.network.outputs.subnetworks["s1"].id
     #network_id = module.subnetwork["s1"].google_compute_subnetwork.subnet.network
     network_id    = module.vpc.vpc_out
-    subnetwork_id = module.subnetwork["s1"].subnet_out.name #module.subnetwork.subnet_out["s1"].name
+    subnetwork_id = module.subnetwork["s1"].subnet_out.self_link #module.subnetwork.subnet_out["s1"].name
     #network_id    = data.terraform_remote_state.network.outputs.network_id
     #subnetwork_id = data.terraform_remote_state.network.outputs.subnetworks["s1"].id
 
