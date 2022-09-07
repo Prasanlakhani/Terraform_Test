@@ -64,9 +64,9 @@ module "nat" {
   nat_router_name = "router-${each.value.region_name}"
   nat_region_name = each.value.region_name
 
-depends_on = [
-  module.router_network
-]
+  depends_on = [
+    module.router_network
+  ]
 }
 
 #output "network_id" {
