@@ -7,11 +7,16 @@ resource "google_sql_database_instance" "master" {
   region              = var.database_instance.region
   deletion_protection = var.database_instance.deletion_protection
 
+
   settings {
     tier = var.database_instance.settings.tier
     backup_configuration {
-      enabled = true
+      enabled = false
     } 
+    database_flags {
+    name  = "cloudsql.iam_authentication"
+    value = "on"
+    }
     ip_configuration {
       ipv4_enabled    = var.database_instance.settings.ipv4_enabled
       private_network = var.network_id
@@ -29,6 +34,7 @@ resource "google_sql_database_instance" "master" {
 resource "google_sql_user" "users" {
   name     = var.sql_user
   instance = google_sql_database_instance.master.name
+  type = "CLOUD_IAM_USER"
 }
 
 resource "google_sql_database" "database" {
