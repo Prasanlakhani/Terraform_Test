@@ -25,3 +25,7 @@ output "router_out" {
 output "router_out_s1" {
   value = module.router_network["s1"].router_out.id
 }
+
+output "service_account_out" {
+  value = module.service_account_id
+}
