@@ -1,6 +1,8 @@
 # Exercise 8 - Modules
 # instance_group/instance_group_var.tf
 
+
+
 variable "health_check" {
   type = object({
     name                = string
@@ -25,8 +27,13 @@ variable "instance_template" {
       auto_delete = bool
       boot        = bool
     })
+    #sa_id = string
   })
 }
+
+#variable "sa_id" {
+#  type = string
+#}
 
 variable "group_manager" {
   type = object({
@@ -61,6 +68,13 @@ variable "network_interface" {
   type = object({
     network_id    = string
     subnetwork_id = string
+  })
+}
+
+variable "service_account" {
+  type = object({
+    sa_id    = string
+
   })
 }
 

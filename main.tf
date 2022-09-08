@@ -95,6 +95,11 @@ module "firewall" {
 }
 
 
+module "service_account_id" {
+  source          = "./Module/service_account"
+  project_name_id = var.project_name
+}
+
 # Exercise 8 - Modules
 # instance_group.tf
 
@@ -106,6 +111,8 @@ data "google_compute_image" "this" {
 module "instance_group" {
   source = "./Module/instance_group"
 
+  #email = module.service_account_id
+  #project_name      = var.project_name
   health_check      = var.health_check
   instance_template = var.instance_template
   group_manager     = var.group_manager
@@ -114,16 +121,19 @@ module "instance_group" {
   instance_boot_disk = var.instance_boot_disk
   public-ssh-key     = local.public-ssh-key
   network_interface = {
-    #network_id    = data.terraform_remote_state.vpc.outputs.vpc_out
-    #subnetwork_id = data.terraform_remote_state.network.outputs.subnetworks["s1"].id
-    #network_id = module.subnetwork["s1"].google_compute_subnetwork.subnet.network
     network_id    = module.vpc.vpc_out
-    subnetwork_id = module.subnetwork["s1"].subnet_out.self_link #module.subnetwork.subnet_out["s1"].name
-    #network_id    = data.terraform_remote_state.network.outputs.network_id
-    #subnetwork_id = data.terraform_remote_state.network.outputs.subnetworks["s1"].id
-
+    subnetwork_id = module.subnetwork["s1"].subnet_out.self_link
   }
+  service_account = {
+    sa_id = module.service_account_id.service_account_out
+  }
+
+  depends_on = [
+    module.service_account_id
+  ]
 }
+
+
 
 # Exercise 8 - Modules
 # lb.tf

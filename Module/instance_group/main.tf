@@ -9,6 +9,11 @@ data "google_compute_image" "this" {
   project = var.instance_boot_disk.image_project
 }
 
+#resource "google_service_account" "default" {
+#  account_id   = "${var.project_name}-id"
+#  display_name = var.project_name
+#}
+
 resource "google_compute_health_check" "http_check" {
   name                = "${var.health_check.name}" #${local.workspace_suffix}"
   timeout_sec         = var.health_check.timeout_sec
@@ -45,6 +50,12 @@ resource "google_compute_instance_template" "this" {
     #access_config { # External IPs blocked in Atos
     #  network_tier = "STANDARD"
     #}
+  }
+
+    service_account {
+    #email  = google_service_account.default.email
+    email = var.service_account.sa_id
+    scopes = ["cloud-platform"]
   }
 
   metadata = {

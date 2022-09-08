@@ -180,7 +180,7 @@ database_instance = {
   }
 }
 
-sql_user = "tf"
+sql_user = "prasanlakhani@gmail.com"
 
 sql_database_name = "tf-db"
 

@@ -81,8 +81,13 @@ variable "instance_template" {
       auto_delete = bool
       boot        = bool
     })
+    #sa_id = string
   })
 }
+
+#variable "sa_id" {
+#  type = string
+#}
 
 variable "group_manager" {
   type = object({
