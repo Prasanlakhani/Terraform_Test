@@ -34,7 +34,8 @@ resource "google_sql_database_instance" "master" {
 resource "google_sql_user" "users" {
   name     = var.sql_user
   instance = google_sql_database_instance.master.name
-  type = "CLOUD_IAM_USER"
+  #type = "CLOUD_IAM_USER"
+  password = "tfuser"
 }
 
 resource "google_sql_database" "database" {
