@@ -176,7 +176,7 @@ database_instance = {
   deletion_protection = false
   settings = {
     tier         = "db-f1-micro"
-    ipv4_enabled = false
+    ipv4_enabled = true
   }
 }
 
