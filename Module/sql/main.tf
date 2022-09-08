@@ -14,7 +14,7 @@ resource "google_sql_database_instance" "master" {
       enabled = false
     } 
     database_flags {
-    name  = "cloudsql.iam_authentication"
+    name  = "cloudsql_iam_authentication"
     value = "on"
     }
     ip_configuration {
